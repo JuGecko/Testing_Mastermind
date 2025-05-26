@@ -1,56 +1,36 @@
 package dev.jugecko;
 
-import java.util.*;
-import java.io.*;
+import java.io.IOException;
+import java.util.List;
 
-// HighscoreManager class - handles saving and loading highscores
-class HighscoreManager {
-    private final String filename;
-    private final List<ScoreEntry> highscores = new ArrayList<>();
+public class HighscoreManager {
+    private final IDatabase database;
 
-    public HighscoreManager(String filename) {
-        this.filename = filename;
-        loadHighscores();
+    public HighscoreManager(IDatabase database) {
+        this.database = database;
     }
 
     public void addHighscore(String name, int attempts) {
-        highscores.add(new ScoreEntry(name, attempts));
-        highscores.sort(Comparator.comparingInt(ScoreEntry::getAttempts));
-        saveHighscores();
+        try {
+            database.saveGame(name, attempts);
+        } catch (IOException e) {
+            System.err.println("Error saving score: " + e.getMessage());
+        }
     }
 
     public void displayHighscores() {
-        System.out.println("--- Highscores ---");
-        for (ScoreEntry entry : highscores) {
-            System.out.println(entry.getName() + ": " + entry.getAttempts() + " attempts");
-        }
-    }
-
-    private void loadHighscores() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 2) {
-                    highscores.add(new ScoreEntry(parts[0], Integer.parseInt(parts[1])));
-                }
-            }
-        } catch (IOException ignored) {
-        }
-    }
-
-    private void saveHighscores() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+        try {
+            List<ScoreEntry> highscores = database.loadTopScores(3);
+            System.out.println("--- Highscores ---");
             for (ScoreEntry entry : highscores) {
-                writer.write(entry.getName() + "," + entry.getAttempts());
-                writer.newLine();
+                System.out.println(entry.getName() + ": " + entry.getAttempts() + " attempts");
             }
         } catch (IOException e) {
-            System.err.println("Failed to save highscores: " + e.getMessage());
+            System.err.println("Error loading highscores: " + e.getMessage());
         }
     }
 
-    private static class ScoreEntry {
+    public static class ScoreEntry {
         private final String name;
         private final int attempts;
 
@@ -68,4 +48,3 @@ class HighscoreManager {
         }
     }
 }
-

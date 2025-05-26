@@ -49,6 +49,8 @@ public class GUI {
         }
 
         highscoreManager.displayHighscores();
-        System.out.println("Thanks for playing!");
+        System.out.println("Dzieki za gre!");
+
+        //database.saveGame(name, attempts); // możliwy wyjątek
     }
 }

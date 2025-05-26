@@ -1,6 +1,5 @@
-// GameMechanicsTest.java
-import dev.jugecko.GameMechanics;
-import dev.jugecko.IDatabase;
+package dev.jugecko;
+
 import org.junit.jupiter.api.*;
 import org.mockito.ArgumentCaptor;
 import java.io.*;
@@ -15,7 +14,7 @@ public class GameMechanicsTest {
     public void testSystemOut_withMockito() {
         PrintStream mockOut = mock(PrintStream.class);
         System.setOut(mockOut);
-        System.out.println("Hello, world!");
+        System.out.println("Test Masterminda!");
 
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         verify(mockOut).println(captor.capture());
@@ -39,7 +38,7 @@ public class GameMechanicsTest {
     @Test
     public void testDatabaseFailure() {
         IDatabase brokenDb = mock(IDatabase.class);
-        doThrow(new IOException("DB not reachable")).when(brokenDb).saveGame(any(), anyInt());
+        doThrow(new IOException("Baza danych nie jest osiagalna.")).when(brokenDb).saveGame(any(), anyInt());
         brokenDb.saveGame("User", 3);
         fail("Expected IOException");
     }
