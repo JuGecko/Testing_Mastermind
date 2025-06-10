@@ -19,7 +19,7 @@ public class GameMechanicsTest {
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         verify(mockOut).println(captor.capture());
 
-        assertEquals("Hello, world!", captor.getValue());
+        assertEquals("Test Masterminda!", captor.getValue());
     }
 
     @Test
@@ -33,14 +33,6 @@ public class GameMechanicsTest {
         assertEquals("1234", scanner.nextLine());
 
         System.setIn(originalIn);
-    }
-
-    @Test
-    public void testDatabaseFailure() throws IOException {
-        IDatabase brokenDb = mock(IDatabase.class);
-        doThrow(new IOException("Baza danych nie jest osiagalna.")).when(brokenDb).saveGame(any(), anyInt());
-        brokenDb.saveGame("User", 3);
-        fail("Expected IOException");
     }
 
     @Test

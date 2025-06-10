@@ -105,5 +105,5 @@ class MainTest {
 //inside the GUITest class
 
 //GAME_MECHANICS TESTS
-//inside the GameMechanicsTest class. (mozna tez zmienic jeden test i usunac interfejs IDatabase jesli jest taka potrzeba)
+//inside the GameMechanicsTest class.
 }

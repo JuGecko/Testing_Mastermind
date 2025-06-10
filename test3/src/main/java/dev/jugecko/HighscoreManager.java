@@ -18,7 +18,7 @@ public class HighscoreManager {
         if (scores.isEmpty()) {
             System.out.println("Brak zapisanych wyników");
         } else {
-            // Sortowanie wyników - mniej prób jest lepsze
+            // Sortowanie wynikow
             List<Score> sortedScores = new ArrayList<>(scores);
             Collections.sort(sortedScores, Comparator.comparingInt(Score::getAttempts));
 
@@ -26,7 +26,8 @@ public class HighscoreManager {
             for (Score score : sortedScores) {
                 System.out.println(position + ". " + score.getName() + " - " + score.getAttempts() + " prób");
                 position++;
-                if (position > 10) break; // Pokazuj tylko top 10
+                if (position > 10) break;
+                // Pokazuj tylko top 10
             }
         }
 
