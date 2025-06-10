@@ -1,40 +1,48 @@
 package dev.jugecko;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class HighscoreManager {
-    private final IDatabase database;
+    private List<Score> scores;
 
-    public HighscoreManager(IDatabase database) {
-        this.database = database;
-    }
-
-    public void addHighscore(String name, int attempts) {
-        try {
-            database.saveGame(name, attempts);
-        } catch (IOException e) {
-            System.err.println("Error saving score: " + e.getMessage());
-        }
+    public HighscoreManager() {
+        this.scores = new ArrayList<>();
     }
 
     public void displayHighscores() {
-        try {
-            List<ScoreEntry> highscores = database.loadTopScores(3);
-            System.out.println("--- Highscores ---");
-            for (ScoreEntry entry : highscores) {
-                System.out.println(entry.getName() + ": " + entry.getAttempts() + " attempts");
+        System.out.println("===== NAJLEPSZE WYNIKI =====");
+
+        if (scores.isEmpty()) {
+            System.out.println("Brak zapisanych wyników");
+        } else {
+            // Sortowanie wyników - mniej prób jest lepsze
+            List<Score> sortedScores = new ArrayList<>(scores);
+            Collections.sort(sortedScores, Comparator.comparingInt(Score::getAttempts));
+
+            int position = 1;
+            for (Score score : sortedScores) {
+                System.out.println(position + ". " + score.getName() + " - " + score.getAttempts() + " prób");
+                position++;
+                if (position > 10) break; // Pokazuj tylko top 10
             }
-        } catch (IOException e) {
-            System.err.println("Error loading highscores: " + e.getMessage());
         }
+
+        System.out.println("===========================");
     }
 
-    public static class ScoreEntry {
-        private final String name;
-        private final int attempts;
+    public void addHighscore(String name, int attempts) {
+        scores.add(new Score(name, attempts));
+        System.out.println("Zapisano wynik dla: " + name + " - " + attempts + " prób");
+    }
 
-        public ScoreEntry(String name, int attempts) {
+    private static class Score {
+        private String name;
+        private int attempts;
+
+        public Score(String name, int attempts) {
             this.name = name;
             this.attempts = attempts;
         }

@@ -36,7 +36,7 @@ public class GameMechanicsTest {
     }
 
     @Test
-    public void testDatabaseFailure() {
+    public void testDatabaseFailure() throws IOException {
         IDatabase brokenDb = mock(IDatabase.class);
         doThrow(new IOException("Baza danych nie jest osiagalna.")).when(brokenDb).saveGame(any(), anyInt());
         brokenDb.saveGame("User", 3);

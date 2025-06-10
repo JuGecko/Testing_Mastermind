@@ -2,7 +2,6 @@ package dev.jugecko;
 
 import java.util.Scanner;
 
-// GUI class - handles user interaction
 public class GUI {
     private final GameMechanics gameMechanics;
     private final HighscoreManager highscoreManager;
